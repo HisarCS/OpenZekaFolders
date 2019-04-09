@@ -1,4 +1,6 @@
-from  import RobotControl
+import sys
+sys.path.append("..")
+from OpenZekaMasterClass import RobotControl
 from  OpenZekaMasterClass import RemoteController
 from time import sleep
 
