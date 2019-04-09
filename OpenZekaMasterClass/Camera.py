@@ -1,11 +1,12 @@
 from threading import Thread
 
 
+
 class Camera:
     def __init__(self):
         print("you have created a Camera object")
 
-    def startGettingFrames(self, onlyTheseFrames=["FrontRight", "FrontLeft", "Back"]):
+    def startGettingFrames(self, onlyTheseFrames=("FrontRight", "FrontLeft", "Back")):
         self.framesToBeQueued = onlyTheseFrames
         print(self.framesToBeQueued)
         Thread(target=self.__frameUpdater__, args=()).start()
@@ -32,5 +33,4 @@ class Camera:
                     self.__getFrontLeft__()
                 elif frame == "Back":
                     self.__getBack__()
-                else:
-                    print("something is wrong")
+

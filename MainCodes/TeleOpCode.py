@@ -1,8 +1,12 @@
 
 import OpenZekaMasterClass
 
-Lidar = OpenZekaMasterClass.Lidar()
-RobotControl = OpenZekaMasterClass.RobotControl()
-Camera = OpenZekaMasterClass.Camera()
-IMU = OpenZekaMasterClass.IMU()
-Joystick = OpenZekaMasterClass.Joystick()
+RC = OpenZekaMasterClass.RemoteController()
+
+RC.startListening(10)
+
+lx, ly = RC.getLeftJoystick()
+
+while True:
+    print(lx, ly)
+

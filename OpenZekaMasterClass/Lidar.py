@@ -20,3 +20,4 @@ class Lidar:
         while True:
             self.depthImage = "depth image retriaval"
             time.sleep(1/self.frequency)
+
