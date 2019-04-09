@@ -6,15 +6,15 @@ Robotun bütün fonksiyonelleri bir 'MasterClass' üzerinden kontrol edilir ve 5
 
 ****************************
 
-IMU
+IMU (still not sure about adding)
 
-Lidar
+Lidar (will work)
 
-RemoteController
+RemoteController (working)
 
-RobotControl
+RobotControl (working)
 
-ZedCam
+ZedCam (definitely needed)
 
 ****************************
 
