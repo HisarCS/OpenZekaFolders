@@ -1,12 +1,14 @@
+from OpenZekaMasterClass import RobotControl
+from OpenZekaMasterClass import RemoteController
+from time import sleep
 
-import OpenZekaMasterClass
+RC = RemoteController()
+RC.startListening()
 
-RC = OpenZekaMasterClass.RemoteController()
-
-RC.startListening(10)
-
-lx, ly = RC.getLeftJoystick()
+robot = RobotControl()
 
 while True:
-    print(lx, ly)
-
+    lx, ly = RC.getLeftJoystick()
+    robot.setMotorSpeed(ly*100.0)
+    robot.setServoAngle(-lx*34)
+    sleep(0.05)
