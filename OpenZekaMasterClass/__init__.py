@@ -1,7 +1,7 @@
 
 __version__ = 0.1
 
-from .Camera import Camera
+from .ZedCam import ZedCam
 from .IMU import IMU
 from .RemoteController import RemoteController
 from .Lidar import Lidar
