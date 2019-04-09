@@ -1,6 +1,6 @@
 import cv2
 import pyzed.sl as sl
-import threading
+from threading import Thread
 
 class ZedCam:
 
@@ -11,15 +11,15 @@ class ZedCam:
 		self.side = side
 		
 		self.zed = sl.Camera()
-    		init = sl.InitParameters()
-    		init.camera_resolution = sl.RESOLUTION.RESOLUTION_HD1080
-    		init.depth_mode = sl.DEPTH_MODE.DEPTH_MODE_PERFORMANCE
-    		init.coordinate_units = sl.UNIT.UNIT_METER
+		init = sl.InitParameters()
+		init.camera_resolution = sl.RESOLUTION.RESOLUTION_HD1080
+		init.depth_mode = sl.DEPTH_MODE.DEPTH_MODE_PERFORMANCE
+		init.coordinate_units = sl.UNIT.UNIT_METER
 		init.camera_fps = fps
 
 		err = zed.open(init_params)
 		if err != sl.ERROR_CODE.SUCCESS:
-   			exit(-1)
+			exit(-1)
 
 		self.frame = None
 		self.depth = None
@@ -32,7 +32,7 @@ class ZedCam:
 			image_depth_zed = sl.Mat(zed.getResolution().width, sl.get_resolution().height, sl.MAT_TYPE.MAT_TYPE_8U_C4)
 			runtime_parameters = sl.RuntimeParameters()
 			if self.zed.grab(runtime_parameters) == sl.ERROR_CODE.SUCCESS:
-  				self.zed.retrieve_image(image, self.side)
+				self.zed.retrieve_image(image, self.side)
 				self.frame = image
 				self.zed.retrieve_measure(depth_map, sl.MEASURE.MEASURE_DEPTH)
 				self.depth = depth_map
