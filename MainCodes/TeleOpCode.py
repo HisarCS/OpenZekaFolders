@@ -12,5 +12,5 @@ robot = RobotControl()
 while True:
     lx, ly = RC.getLeftJoystick()
     robot.setMotorSpeed(ly*100.0)
-    robot.setServoAngle(-lx*34)
+    robot.setServoAngle(-lx*34.0)
     sleep(0.05)

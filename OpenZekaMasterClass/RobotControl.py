@@ -45,6 +45,7 @@ class RobotControl:
         -34.0 if desiredAngle < -34.0 else desiredAngle
 
         self.desiredAngle = desiredAngle/100.0
+        self.moveMotors.drive.steering_angle = self.desiredAngle
         # print("set desired angle to:{}".format(self.desiredAngle))
 
 
