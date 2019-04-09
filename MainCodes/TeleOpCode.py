@@ -1,5 +1,5 @@
-from OpenZekaMasterClass import RobotControl
-from OpenZekaMasterClass import RemoteController
+from  import RobotControl
+from  OpenZekaMasterClass import RemoteController
 from time import sleep
 
 RC = RemoteController()

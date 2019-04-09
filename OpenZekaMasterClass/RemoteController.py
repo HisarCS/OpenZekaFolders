@@ -21,7 +21,7 @@ class RemoteController:
 
         self.isListening = False
 
-    def startListening(self, frequency):
+    def startListening(self, frequency=10):
         self.frequency = frequency
         self.isListening = True
         Thread(target=self.__update__, args=()).start()
