@@ -14,19 +14,22 @@ def polyFit(xAxis, yAxis, degree):
         equation = []
     return equation
 
-def drawLines(image, lines):
-    line_image = np.zeros_like(image)
+def convertToEquation(lines, image):
     equations = list()
-    print("printing the slope \n")
     if lines is not None:
         for line in lines:
             x1, y1, x2, y2 = line.reshape(4)
             equations.append(polyFit((x1, x2), (image.shape[0] - y1, image.shape[0] -y2), 1))
-            cv2.line(line_image, (x1, y1), (x2, y2), (255, 0, 0), 10)
-            print(polyFit((x1, x2), (image.shape[0] - y1, image.shape[0] -y2), 1))
-    print("\n printed the slopes \n")
 
-    return equations, line_image
+
+def drawLines(image, lines):
+    line_image = np.zeros_like(image)
+
+    if lines is not None:
+        for line in lines:
+            x1, y1, x2, y2 = line.reshape(4)
+            cv2.line(line_image, (x1, y1), (x2, y2), (255, 0, 0), 10)
+    return  line_image
 
 def lineOperations(equations):
     equationsWithCloseValues = list()
@@ -34,65 +37,50 @@ def lineOperations(equations):
     equations.sort()
 
     for (i, test_equation1) in enumerate(equations, 0):
-        # closeIndexes.append([i])
-        # print(closeIndexes)
-
         for (j, test_equation2) in enumerate(equations, 0):
-            diffEq = diffBetweenEqs(test_equation1, test_equation2)
-            integral = linearIntegralFinder(diffEq)
-            intersectionPoint = findIntersection(test_equation1, test_equation2, 0.0)
 
-            area = integralSquareFinder(integral, intersectionPoint, intersectionPoint + 100)
-            # test_equation2 = [test_equation2, area]
-            # closeIndexes[0].append(test_equation2)
+            diff = abs(np.arctan(test_equation1[0]) - np.arctan(test_equation2[0])) * 180/np.pi
 
-            if (area < 20000000) and (not equations[j] in closeIndexes):
-                # print(len(closeIndexes), "blbl")
-                # test_equation2 = [test_equation2, area]
+            if (diff < 20) and (not equations[j] in closeIndexes):
                 closeIndexes.append(test_equation2)
-
-            # sleep(0.0005)
 
         if closeIndexes not in equationsWithCloseValues:
             equationsWithCloseValues.append(closeIndexes)
 
         closeIndexes = list()
 
-    for line in sorted(equationsWithCloseValues):
-        print(line)
-        print("   ")
+    topThreeInLength = sortTheArrayLen(equationsWithCloseValues)
+    TheReliableThreeLines = list()
+    for line in sorted(topThreeInLength):
+        # print(line)
+        # print("   ")
+        slopes = list()
+        for s in line:
+            slopes.append(s[0])
+        intercepts = list()
+        for i in line:
+            intercepts.append(i[1])
+
+        meanSlope = np.mean(slopes)
+        meanIntercept = np.mean(intercepts)
+        # print(meanSlope, meanIntercept)
+        TheReliableThreeLines.append([meanSlope, meanIntercept])
+
+    return TheReliableThreeLines
 
 
+def sortTheArrayLen(array):
+    theIndexList = list()
+    for (i, l1) in enumerate(array):
+        theIndexList.append([len(l1), i])
+    theIndexList = sorted(theIndexList, reverse=True)
 
+    theTopThree = list()
+    for t in theIndexList[:3]:
+        indexNumber = t[1]
+        theTopThree.append(array[indexNumber])
 
-def quadraticSolver(array, value):
-    return array[0] * (value ** 2) + array[1] * value + array[2]
-
-def integralSquareFinder(equation, lowRange, highRange):
-        return (quadraticSolver(equation, highRange) - quadraticSolver(equation, lowRange)) ** 2
-
-def linearIntegralFinder(equation, c=0):
-    integral = list()
-    integral.append(equation[0] / 2.0)
-    integral.append(equation[1])
-    integral.append(c)
-
-    return integral
-
-def diffBetweenEqs(equation1, equation2):
-    resultantEq = list()
-    resultantEq.append(equation1[0] - equation2[0])
-    resultantEq.append(equation1[1] - equation2[1])
-    return resultantEq
-
-
-def findIntersection(eq1,eq2,x0):
-    fun1 = np.poly1d(eq1)
-    fun2 = np.poly1d(eq2)
-
-    return fsolve(lambda x : fun1(x) - fun2(x),x0)[0]
-
-
+    return theTopThree
 
 
 def warpImage(testImage):
@@ -126,8 +114,9 @@ minLineLength = int(frame.shape[0]*0.333)
 maxLineGap = int(frame.shape[0]*0.333)
 lines = cv2.HoughLinesP(cannyImage, 3, np.pi/30, thresh_area, np.array([]), minLineLength=minLineLength, maxLineGap=maxLineGap)
 
-equationsg, line_image = drawLines(cannyImage, lines)
-lineOperations(equationsg)
+equationsg = convertToEquation(lines, cannyImage)
+Reliables = lineOperations(equationsg)
+_, line_image = drawLines(cannyImage, Reliables)
 
 ############### FINDING THE LINES DONE #################################
 

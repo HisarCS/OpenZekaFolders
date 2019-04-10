@@ -1,30 +1,29 @@
 
 
-list1 = [[1, 2, 3, 3],[2, 3],[3, 4],[4],[5],[6],[7, 5],[8],[9],[0]]
+list1 = [[1, 2, 3, 3],[2, 3],[3, 4],[4],[5],[6],[7, 5],[8],[9, 2, 2, 2],[0]]
 
 
 
 
+def sortTheArrayLen(array):
+    theIndexList = list()
+    for (i, l1) in enumerate(array):
+        theIndexList.append([len(l1), i])
+    theIndexList = sorted(theIndexList, reverse=True)
 
-# occuredCounter = list()
-# for l1 in list1:
-#     for l2 in l1:
-#         # print(l1, l2)
-#         if l2 in l1:
-#             if l2 in occuredCounter:
-#                 print("the number exist more than once", l2)
-#                 # occuredCounter.pop()
-#             else:
-#                 occuredCounter.append(l2)
-#
-# print(occuredCounter)
+    theTopThree = list()
+    for t in theIndexList[:3]:
+        indexNumber = t[1]
+        theTopThree.append(array[indexNumber])
 
-
-def sortTheArray(array):
-    theNumberList = list()
-    for l1 in array:
-        theNumberList.append(len(l1))
-    print(theNumberList, sorted(theNumberList, reverse=True))
+    return theTopThree
 
 
-sortTheArray(list1)
+
+
+topThree = sortTheArrayLen(list1)
+print(topThree)
+
+# print(list1.index([0]))
+
+# print(min(len(list1)))

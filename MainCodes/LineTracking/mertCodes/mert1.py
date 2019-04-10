@@ -379,38 +379,40 @@ def process_frame(img):
     left_fit, right_fit, leftx, lefty, rightx, righty = track_lanes_update(birdseye_result, left_fit, right_fit)
 
     colored_lane = lane_fill_poly(birdseye_result, img, left_fit, right_fit)
-
+    print(left_fit, right_fit)
+    #
     # print("Offset:")
     # print(vehicle_offset(colored_lane, left_fit, right_fit))
     # print("Radius of curvature:")
     # print(measure_curve(birdseye_result, left_fit, right_fit))
-    plt.figure()
-    plt.imshow(colored_lane);
-    plt.tight_layout()
 
+    return colored_lane
+    # plt.figure()
+    # plt.imshow(colored_lane);
+    # plt.tight_layout()
 
-# imgPath = "/Users/yasaridikut/PycharmProjects/LineTrackingOpenZeka/mertCodes/new_road.jpg"
-# loaded_img = mpimg.imread(imgPath)
-# process_frame(loaded_img)
-# plt.show()
-
-vc = cv.VideoCapture("test_video.mp4")
+vc = cv.VideoCapture("Interstate70.mp4")
 
 
 while (vc.isOpened()):
 
-    start = time()
+    # start = time()
     (ret, frame) = vc.read()
     frame = imutils.resize(frame, width=300)
     afterGettingFrames = time()
     if ret:
-        process_frame(frame)
-        plt.show()
+        try:
+            frame = process_frame(frame)
+            cv.imshow("frame", frame)
+            if cv.waitKey(1) == ord("q"):
+                break
+        except:
+            print("an error occured")
 
-        afterProcessing = time()
+        # afterProcessing = time()
 
-        print(abs(start - afterGettingFrames), abs(start - afterProcessing))
-    plt.pause(0.0001)
+        # print(abs(start - afterGettingFrames), abs(start - afterProcessing))
+    # plt.pause(0.0001)
 
 
 
