@@ -20,7 +20,7 @@ def convertToEquation(lines, image):
         for line in lines:
             x1, y1, x2, y2 = line.reshape(4)
             equations.append(polyFit((x1, x2), (image.shape[0] - y1, image.shape[0] -y2), 1))
-
+    return equations
 
 def drawLines(image, lines):
     line_image = np.zeros_like(image)
@@ -116,7 +116,7 @@ lines = cv2.HoughLinesP(cannyImage, 3, np.pi/30, thresh_area, np.array([]), minL
 
 equationsg = convertToEquation(lines, cannyImage)
 Reliables = lineOperations(equationsg)
-_, line_image = drawLines(cannyImage, Reliables)
+# _, line_image = drawLines(cannyImage, Reliables)
 
 ############### FINDING THE LINES DONE #################################
 
