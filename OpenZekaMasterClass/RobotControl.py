@@ -1,4 +1,7 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
+
+import subprocess
+_ = subprocess.Popen(['cd', '/home/nvidia/racecar-ws/', '&', 'roslaunch', 'racecar', 'teleop2.launch'],stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
 
 import rospy
 from ackermann_msgs.msg import AckermannDriveStamped
@@ -7,8 +10,8 @@ from time import sleep
 
 
 class RobotControl:
-    def __init__(self, controlFreq=10):
-        print("you have created a RobotControl object")
+    def __init__(self, controlFreq=100):
+        # print("you have created a RobotControl object")
         self.controlFreq = controlFreq
         rospy.init_node("RobotControl")
         self.pub = rospy.Publisher("/ackermann_cmd", AckermannDriveStamped, queue_size=1)
@@ -16,6 +19,7 @@ class RobotControl:
         self.moveMotors = AckermannDriveStamped()
 
         self.stopEverything()
+        self.isUpdating = True
 
         Thread(target=self.__update__, args=()).start()
 
@@ -24,9 +28,12 @@ class RobotControl:
         self.moveMotors.drive.steering_angle = 0.0
 
     def __update__(self):
-        while not rospy.is_shutdown():
+        while (not rospy.is_shutdown()) and (self.isUpdating):
             self.pub.publish(self.moveMotors)
             self.rate.sleep()
+
+    def close(self):
+        self.isUpdating = False
 
 
     def setMotorSpeed(self, speed):

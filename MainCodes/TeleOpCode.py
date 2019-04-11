@@ -1,5 +1,6 @@
 import sys
 sys.path.append("..")
+
 from OpenZekaMasterClass import RobotControl
 from  OpenZekaMasterClass import RemoteController
 from time import sleep
@@ -11,6 +12,6 @@ robot = RobotControl()
 
 while True:
     lx, ly = RC.getLeftJoystick()
+    print(lx, ly)
     robot.setMotorSpeed(ly*100.0)
     robot.setServoAngle(-lx*34.0)
-    sleep(0.05)

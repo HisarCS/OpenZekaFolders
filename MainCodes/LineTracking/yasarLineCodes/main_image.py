@@ -22,14 +22,32 @@ def convertToEquation(lines, image):
             equations.append(polyFit((x1, x2), (image.shape[0] - y1, image.shape[0] -y2), 1))
     return equations
 
-def drawLines(image, lines):
-    line_image = np.zeros_like(image)
 
-    if lines is not None:
-        for line in lines:
-            x1, y1, x2, y2 = line.reshape(4)
-            cv2.line(line_image, (x1, y1), (x2, y2), (255, 0, 0), 10)
-    return  line_image
+def drawEquations(image, equations):
+    copyImage = image
+    for equation in equations:
+        y1 = 0
+        y2 = image.shape[0]
+
+        x1 = int(solveInverseOfEquation(equation, y1))
+        x2 = int(solveInverseOfEquation(equation, y2))
+
+        print((x1, x2), (image.shape[0] - y1, image.shape[0] - y2))
+
+        cv2.line(copyImage, (x1, image.shape[0] - y1), (x2, image.shape[0] - y2), 120, 10)
+
+    return copyImage
+
+
+def solveInverseOfEquation(equation, x):
+    inverseEquation = [1/equation[0], -equation[1]/equation[0]]
+    # func = np.poly1d(equation)
+    # invFunc = np.poly1d(inverseEquation)
+    print(equation, "        ", inverseEquation)
+    print((inverseEquation[0] * x) + inverseEquation[1])
+
+    return (inverseEquation[0] * x) + inverseEquation[1]
+
 
 def lineOperations(equations):
     equationsWithCloseValues = list()
@@ -94,7 +112,7 @@ def warpImage(testImage):
     return warped
 
 
-frame = cv2.imread("new_road.jpg", 0)
+frame = cv2.imread("test_image.jpg", 0)
 
 ############### IMAGE TAKING COMPLETE #################################
 
@@ -116,8 +134,7 @@ lines = cv2.HoughLinesP(cannyImage, 3, np.pi/30, thresh_area, np.array([]), minL
 
 equationsg = convertToEquation(lines, cannyImage)
 Reliables = lineOperations(equationsg)
-# _, line_image = drawLines(cannyImage, Reliables)
-
+drawnImage = drawEquations(frame, Reliables)
 ############### FINDING THE LINES DONE #################################
 
 
@@ -126,7 +143,7 @@ cv2.imshow("testImage", frame)
 cv2.imshow("blurred", blurred)
 cv2.imshow("canny image", cannyImage)
 # cv2.imshow("warped", warped)
-cv2.imshow("line image", line_image)
+cv2.imshow("line image", drawnImage)
 
 cv2.waitKey(0)
 
