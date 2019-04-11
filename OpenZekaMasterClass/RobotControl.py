@@ -1,7 +1,9 @@
 #! /usr/bin/env python3
 
 import subprocess
-_ = subprocess.Popen(['cd', '/home/nvidia/racecar-ws/', '&', 'roslaunch', 'racecar', 'teleop2.launch'],stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
+_ = subprocess.Popen(['cd', '/home/nvidia/racecar-ws/', '&', 'roslaunch', 'racecar', 'teleop2.launch'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+
+
 
 import rospy
 from ackermann_msgs.msg import AckermannDriveStamped
