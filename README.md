@@ -1,14 +1,14 @@
 # OpenZekMasterClass
 
-Burada bulunan kodlar OpenZeka yarışması içindir. 
+All the codes were used in the OpenZeka Mini Autonomus Racecar Competition.
 
-Robotun bütün fonksiyonelleri bir 'MasterClass' üzerinden kontrol edilir ve 5 ana sınıftan oluşur.
+Robots functions are controlled over the MasterClass and are composed of 5 main classes. 
 
 ****************************
 
-IMU (still not sure about adding)
+IMU (working)
 
-Lidar (will work)
+Lidar (working)
 
 RemoteController (working)
 
